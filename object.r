@@ -16,7 +16,7 @@ Object <- local({
   clone <- function() {
     env <- new.env(TRUE, self$proto())
     # message(envname(self$proto()), ": making clone ", envname(env))
-    cloned <- structure(list(env), class = "io")
+    cloned <- as.io(env)
     cloned$self <- cloned
     cloned$init()
     cloned
@@ -57,7 +57,6 @@ Object <- local({
   }
   
   as_string <- function(...) {
-    
     paste("Object <", envname(self$proto()), ">", sep = "")
   }
   
@@ -66,6 +65,7 @@ Object <- local({
   }
 
   protos <- function() {
+    lapply(envlist(self$proto()), as.io)
     # How to make this a tree, rather than a list?
   }
   
@@ -101,7 +101,7 @@ Object <- local({
   super <- function(expr) {}
   resend <- function(expr) {}
   
-  structure(list(environment()), class = "io")
+  as.io(environment())
 })
 parent.env(Object[[1]]) <- baseenv()
 
@@ -119,4 +119,22 @@ print.io <- function(x, ...) {
 }
 envname <- function(env) {
   gsub("<environment: |>", "", utils::capture.output(print(env)))
+}
+
+envlist <- function(env) {
+  if (is.emptyenv(env)) return()
+  if (is.globalenv(env)) return(list(env))
+  
+  c(env, envlist(parent.env(env)))
+}
+is.emptyenv <- function(env) identical(env, emptyenv())
+is.globalenv <- function(env) identical(env, globalenv())
+is.baseend <- function(env) identical(env, baseenv())
+
+as.io <- function(x) UseMethod("as.io")
+as.io.environment <- function(x) {
+  # Return unchanged if not really an io object
+  if (!exists("get_slot", x))  return(x)
+
+  structure(list(x), class = "io")
 }
