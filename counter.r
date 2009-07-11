@@ -1,7 +1,7 @@
-Counter <- Object$clone()$do{(
-  init <- function() self$count <- 1
+Counter <- Object$clone()$do({
+  init <- function() self$counter <- 0
   count <- function() {
-    self$count <- self$count + 1
-    self$count
+    self$counter <- self$counter + 1
+    self$counter
   }
-)}
+})
