@@ -4,20 +4,24 @@
 #   R requires () for all function calls
 
 Object <- local({
+  .name <- "Object"
+  
   proto <- function() {
     self[[1]]
   }
-  
-  do <- function(expr) {
-    eval(substitute(expr), self$proto(), self$proto())
-    self
+  super <- function() protos[[2]]
+
+  protos <- function() {
+    lapply(envlist(self$proto()), as.io)
+    # How to make this a tree, rather than a list?
   }
   
-  clone <- function() {
+  clone <- function(name = "Object") {
+    # Create new environment with this object as parent
     env <- new.env(TRUE, self$proto())
-    # message(envname(self$proto()), ": making clone ", envname(env))
     cloned <- as.io(env)
-    cloned$self <- cloned
+    cloned$.name <- name
+    # Run initialise
     cloned$init()
     cloned
   }
@@ -56,23 +60,6 @@ Object <- local({
     assign(name, value, self$proto())    
   }
   
-  as_string <- function(...) {
-    paste("Object <", envname(self$proto()), ">", sep = "")
-  }
-  
-  print <- function(...) {
-    cat(self$as_string(...), "\n", sep = "")
-  }
-
-  protos <- function() {
-    lapply(envlist(self$proto()), as.io)
-    # How to make this a tree, rather than a list?
-  }
-  
-  slot_names <- function() {
-    ls(self$proto())
-  }
-  
   remove_slot <- function(name) {
     set_slot(name, NULL)
   }
@@ -85,21 +72,42 @@ Object <- local({
     set_slot(name, value)
   }
   
-  do_string <- function(text) {
-    eval(parse(text = text), proto(), proto())
+  slot_names <- function() {
+    ls(self$proto())
+  }
+  slot_summary <- function() {
+    names <- self$slot_names()
+    descriptions <- unlist(lapply(names, function(name) {
+      capture.output(str(get(name, self$proto()), max.level = 1, give.attr=F))
+    }))
+    descriptions <- gsub("^ +| +$", "", descriptions)
+    
+    out <- cbind(names, descriptions)
+    rownames(out) <- rep("", nrow(out))
+    noquote(out)
   }
 
+  do <- function(expr) {
+    eval(substitute(expr), self$proto(), self$proto())
+    self
+  }
+
+  do_string <- function(text) {
+    eval(parse(text = text), self$proto(), self$proto())
+  }
+  
   #' @param chdir change working directory when evaluating code in file?
   do_file <- function(path, chdir = TRUE) {
-    sys.source(path, proto(), chdir = chdir)
+    sys.source(path, self$proto(), chdir = chdir)
+  }
+
+  as_string <- function(...) {
+    paste(self$.name, " <", envname(self$proto()), ">", sep = "")
   }
   
-  inline <- function(expr) {
-    # sets environment to environment of object, so has no local scope
+  print <- function(...) {
+    cat(self$as_string(...), "\n", sep = "")
   }
-  
-  super <- function(expr) {}
-  resend <- function(expr) {}
   
   as.io(environment())
 })
