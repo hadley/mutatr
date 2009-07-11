@@ -1,3 +1,5 @@
+source("object.r")
+
 Counter <- Object$clone()$do({
   init <- function() self$counter <- 0
   count <- function() {

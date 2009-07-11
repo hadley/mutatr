@@ -1,3 +1,5 @@
+source("object.r")
+
 Observable <- Object$clone()$do({
   add_listener <- function(f, name = digest(f)) {
     self$listeners[[name]] <- f
