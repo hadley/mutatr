@@ -61,7 +61,7 @@ Object <- local({
   }
   
   remove_slot <- function(name) {
-    set_slot(name, NULL)
+    rm(list = name, envir = self$proto())
   }
   
   # Same as set_slot, but raises an error if the slot doesn't already exist.
