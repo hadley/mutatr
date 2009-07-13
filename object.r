@@ -1,3 +1,4 @@
+source("utils.r")
 # Translation from IO
 #   " " ->  $
 #   :=  ->  <- 
@@ -9,31 +10,70 @@ Object <- local({
   proto <- function() {
     self[[1]]
   }
-  super <- function() protos[[2]]
+  super <- function() protos[[1]]
 
-  protos <- function() {
-    lapply(envlist(self$proto()), as.io)
-    # How to make this a tree, rather than a list?
+  protos <- list()
+  
+  #' Add prototype to end of inheritance chain
+  #' @returns self
+  append_proto <- function(proto) {
+    stopifnot(is.io(proto))
+    self$protos <- c(self$protos, list(proto))
+    self
   }
   
-  clone <- function(name = "Object") {
-    # Create new environment with this object as parent
-    env <- new.env(TRUE, self$proto())
-    cloned <- as.io(env)
-    cloned$.name <- name
-    # Run initialise
-    cloned$init()
-    cloned
+  #' Add prototype to start of inheritance chain
+  #' @returns self
+  prepend_proto <- function(proto) {
+    stopifnot(is.io(proto))
+    self$protos <- c(list(proto), self$protos)
+    self
   }
-  init <- function() {}
+  
+  remove_proto <- function(proto) {
+    pos <- sapply(self$protos, identical, proto)
+    self$protos[pos] <<- NULL
+    self
+  }
+  
+  clone <- function(name = NULL) {
+    # Need to short circuit usual accessor functions until we have enough
+    # scaffolding in place
+    env <- new.env(TRUE, baseenv())
+    env$protos <- list(self)
+    aclone <- as.io(env)
+    if (!is.null(name)) {
+      aclone$.name <- name
+    }
+    aclone$init() # initialise cloned object
+    aclone
+  }
   
   has_slot <- function(name, local = FALSE) {
-    exists(name, self$proto(), inherits = !local)
+    if (local) {
+      exists(name, self$proto(), inherits = FALSE)
+    } else {
+      has_slot(name, TRUE) || sapply(self$protos(), 
+        function(x) x$has_slot(name))
+    }
   }
   
-  get_slot <- function(name, self) {
+  get_slot <- function(name, local = FALSE) {
+    if (local) {
+      if (self$has_slot(name, TRUE)) {
+        return(get(name, self$proto()))
+      } else {
+        return(NULL)        
+      }
+    } else {}
     # message(envname(env), ": getting ", name)
     gettor <- function(name) paste("get_", name, sep = "")
+
+    
+    # Try ancestors
+    for(i in seq_along(self$protos)) {
+      ancestor <- self$protos[[i]]
+      if (ancestor$has_slot(name))
 
     # if (self$has_slot(gettor(name))) {
     #   # Look for gettor & execute if found
@@ -43,17 +83,6 @@ Object <- local({
     #   get("forward", self$proto())(name)
     # }
     
-    res <- get(name, self[[1]])
-    
-    # Reset the function environment to an environment that contains the self
-    # object. This is bit of a hack because it will break closures - really
-    # should replace environment further up stack. 
-    if (is.function(res)) {
-      env <- new.env(parent = parent.frame(2))
-      env$self <- self
-      environment(res) <- env
-    }
-    res
   }
   
   set_slot <- function(name, value) {
@@ -76,7 +105,7 @@ Object <- local({
     ls(self$proto())
   }
   slot_summary <- function() {
-    names <- self$slot_names()
+    names <- setdiff(self$slot_names(), c("name", "protos"))
     descriptions <- unlist(lapply(names, function(name) {
       capture.output(str(get(name, self$proto()), max.level = 1, give.attr=F))
     }))
@@ -88,7 +117,7 @@ Object <- local({
   }
 
   do <- function(expr) {
-    eval(substitute(expr), self$proto(), self$proto())
+    eval(substitute(expr), self$proto())
     self
   }
 
@@ -114,7 +143,34 @@ Object <- local({
 parent.env(Object[[1]]) <- baseenv()
 
 "$.io" <- function(x, i, ...) {
-  get("get_slot", x[[1]])(i, x)
+  name <- i
+  env <- x[[1]]
+  
+  # First, look in own methods
+  res <- NULL
+  if (exists(name, env, inherits = FALSE)) {
+    res <- get(name, env)      
+  } else {
+    # Next, look in inheritance chain
+    for(i in seq_along(env$protos)) {
+      proto <- env$protos[[i]]
+      if (exists(name, proto[[1]], inherits = FALSE)) {
+        res <- get(name, proto[[1]])
+        break
+      }
+    }
+    if (is.null(res)) stop("Could not find method ", name, call. = F)
+  }
+  
+  # Reset the function environment to an environment that contains the self
+  # object. This is bit of a hack because it will break closures - really
+  # should replace environment further up stack. 
+  if (is.function(res)) {
+    env <- new.env(parent = parent.frame(2))
+    env$self <- x
+    environment(res) <- env
+  }
+  res
 }
 
 "$<-.io" <- function(x, i, value) {
@@ -124,25 +180,4 @@ parent.env(Object[[1]]) <- baseenv()
 
 print.io <- function(x, ...) {
   x$print()
-}
-envname <- function(env) {
-  gsub("<environment: |>", "", utils::capture.output(print(env)))
-}
-
-envlist <- function(env) {
-  if (is.emptyenv(env)) return()
-  if (is.globalenv(env)) return(list(env))
-  
-  c(env, envlist(parent.env(env)))
-}
-is.emptyenv <- function(env) identical(env, emptyenv())
-is.globalenv <- function(env) identical(env, globalenv())
-is.baseend <- function(env) identical(env, baseenv())
-
-as.io <- function(x) UseMethod("as.io")
-as.io.environment <- function(x) {
-  # Return unchanged if not really an io object
-  if (!exists("get_slot", x))  return(x)
-
-  structure(list(x), class = "io")
 }
