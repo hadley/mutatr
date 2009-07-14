@@ -9,35 +9,37 @@ core(Object)$set_slot("set_slot", function(name, value) {
   core(self)$set_slot(name, value)
 })
 
-"$.io" <- function(x, i, ...) {
-  res <- core(x)$get_local_slot(i)
-  
+object_scope <- function(res, self) {
   # Add environment to top of stack that contains the self object
   if (is.function(res)) {
     env <- new.env()
-    env$self <- x
+    env$self <- self
     parent.env(env) <- environment(res)
     environment(res) <- env
   }
   res
 }
 
+
+# Basic bootstrapping accessor - can do better once object has more methods
+"$.io" <- function(x, i, ...) {
+  res <- core(x)$get_local_slot(i)
+  object_scope(res, x)
+}
 "$<-.io" <- function(x, i, value) {
   x$set_slot(i, value)
   x
 }
 
-# Now that minimal necessary bootstrapping is in place, we can start to
-# use the methods on the object directly
-
-
-
 # Next we create a do function that lets us define
 # multiple functions simultaneously.  Basic strategy is to evaluate in
-# temporary environment and then copy everything across with set_slot.
+# temporary environment and then copy everything across with set_slot. 
 Object$do <- function(expr) {
   env <- new.env(parent = globalenv())
   eval(substitute(expr), env)
+  self$load_enviro(env)
+}
+Object$load_enviro <- function(env) {
   for(name in ls(env, all = TRUE)) {
     self$set_slot(name, get(name, env))
   }
@@ -45,8 +47,18 @@ Object$do <- function(expr) {
   self
 }
 
+
 Object$do({
   .name <- "Object"
+  
+  # do_string <- function(text) {
+  #   eval(parse(text = text), self$proto(), self$proto())
+  # }
+  # 
+  # #' @param chdir change working directory when evaluating code in file?
+  # do_file <- function(path, chdir = TRUE) {
+  #   sys.source(path, self$proto(), chdir = chdir)
+  # }
   
   remove_slot <- function(name) {
     core(self)$remove_slot(name)
@@ -92,10 +104,8 @@ Object$do({
   print <- function(...) {
     cat(self$as_string(...), "\n", sep = "")
   }
-  
 })
 
-Object$slot_names()
 
 print.io <- function(x, ...) {
   x$print()

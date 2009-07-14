@@ -1,4 +1,4 @@
-source("object.r")
+source("bootstrap-inheritance.r")
 
 Account <- Object$clone()
 Account$balance <- 0.0
@@ -11,6 +11,7 @@ Account$init <- function() self$balance <- 0
 Account <- Object$clone()$do({
   balance <- 0.0
   deposit <- function(v) self$balance <- self$balance + v
+  withdraw <- function(v) self$balance <- self$balance - v
   show <- function() cat("Account balance: $", self$balance, "\n")
   init <- function() self$balance <- 0
 })
@@ -26,10 +27,12 @@ Account$show()
 
 Savings <- Account$clone()$do({
   interest <- 0.05
+  withdraw <- NULL
 })
+Savings$show()
 
 
-# Closures are broken because of environment hacks
+# Closures work too :)
 adder <- function(y) function(x) x + y
 Account$test <- adder(100)
 Account$test(10)
