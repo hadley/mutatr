@@ -1,4 +1,4 @@
-source("bootstrap-inheritance.r")
+source("../object-inheritance.r", chdir = TRUE)
 
 Counter <- Object$clone()$do({
   init <- function() self$counter <- 0

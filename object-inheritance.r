@@ -1,4 +1,4 @@
-source("bootstrap-object.r")
+source("object.r")
 
 Object$do({
   protos <- list()

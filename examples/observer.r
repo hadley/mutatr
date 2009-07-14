@@ -1,4 +1,4 @@
-source("object.r")
+source("../object-inheritance.r", chdir = TRUE)
 
 Observable <- Object$clone()$do({
   .name <- "Observable"
