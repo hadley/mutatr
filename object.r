@@ -51,14 +51,18 @@ Object$load_enviro <- function(env) {
 Object$do({
   .name <- "Object"
   
-  # do_string <- function(text) {
-  #   eval(parse(text = text), self$proto(), self$proto())
-  # }
-  # 
-  # #' @param chdir change working directory when evaluating code in file?
-  # do_file <- function(path, chdir = TRUE) {
-  #   sys.source(path, self$proto(), chdir = chdir)
-  # }
+  do_string <- function(text) {
+    env <- new.env(parent = globalenv())
+    eval(parse(text = text), env)
+    self$load_enviro(env)
+  }
+  
+  #' @param chdir change working directory when evaluating code in file?
+  do_file <- function(path, chdir = TRUE) {
+    env <- new.env(parent = globalenv())
+    sys.source(path, env, chdir = chdir)
+    self$load_enviro(env)
+  }
   
   remove_slot <- function(name) {
     core(self)$remove_slot(name)
