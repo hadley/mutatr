@@ -7,7 +7,7 @@ Object$do({
   # ' @returns self
   append_proto <- function(proto) {
     stopifnot(is.io(proto))
-    self$protos <- c(self$protos, proto)
+    self$protos <- c(self$protos, list(proto))
     self
   }
   
@@ -15,7 +15,7 @@ Object$do({
   #' @returns self
   prepend_proto <- function(proto) {
     stopifnot(is.io(proto))
-    self$protos <- c(proto, self$protos)
+    self$protos <- c(list(proto), self$protos)
     self
   }
   

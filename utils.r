@@ -21,3 +21,9 @@ as.io.environment <- function(x) {
 }
 
 is.io <- function(x) inherits(x, "io")
+
+
+expect_error <- function(x) {
+  res <- try(force(x), TRUE)
+  stopifnot(inherits(res, "try-error"))
+}
