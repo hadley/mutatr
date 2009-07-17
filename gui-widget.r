@@ -1,6 +1,3 @@
-library(gWidgets)
-source("object-inheritance.r")
-
 Widget <- Object$clone()$do({
   init <- function() {
     self$expand <- FALSE

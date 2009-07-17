@@ -46,6 +46,3 @@ Window <- Widget$clone()$do({
     )
   }  
 })
-
-
-w <- Window$clone()
