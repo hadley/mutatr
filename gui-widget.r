@@ -1,3 +1,5 @@
+library(gwidgets)
+
 Widget <- Object$clone()$do({
   init <- function() {
     self$expand <- FALSE

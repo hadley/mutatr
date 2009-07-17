@@ -14,6 +14,11 @@ Button <- Object$clone()$do({
     svalue(self$widget)
   }
   
+  click <- function() {
+    # Is it possible to do this with gwidgets?
+    # Or should I just manually run all of the matching handlers (if I can
+    # find them), and then set svalue appropriately for each widget
+  }
   
   add_handler <- function(event, callback) {
     switch(event, 

@@ -1,10 +1,13 @@
+# Advantages:
+#   * don't have to worry about polluting global namespace
+#   * hierarchy of object names exactly matches hierarchy of gui
+#   * indenting level exactly matches hierarchy of gui
+# Disadvantages
+#   * need to name full tree
+
 w <- Window$clone()$do({
   title <- "Tour"
-
   
-  # If you want to share state across the gui:
-  tabs <- tabs_object_created_else_where
-  # If you want unique state
   tabs <- tabs_object_created_else_where$clone()
   
   # When you don't want to access later
@@ -22,7 +25,10 @@ w <- Window$clone()$do({
 
 
 w$show()
-w$stop$push()
+w$title <- "A new title"
+w$stop$click()
+w$stop$state
+w$stop$click()
 w$stop$state
 
 
