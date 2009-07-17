@@ -1,23 +1,21 @@
 source("gui-widget.r")
 
 Window <- Widget$clone()$do({
-  init <- function() {
-    self$widget <- self$build_widget()
-  }
-  
-  events <- c("destroy", "unrealize")
-  handlers <- list()
-  
-  set_title <- function(title) {
-    svalue(self$widget) <- title
-  }
     
   build_widget <- function() {
     gwindow(visible = FALSE)
   }
   
+  set_title <- function(title) {
+    svalue(self$widget) <- title
+  }
+
+  get_title <- function() {
+    svalue(self$widget)
+  }
+  
   set_size <- function(width, height) {
-    size(self$widget) <- c(self$width, self$height)
+    size(self$widget) <- c(width, height)
   }
   
   get_size <- function() {
@@ -36,7 +34,6 @@ Window <- Widget$clone()$do({
   # Close window.  
   close <- function() {
     dispose(self$widget)
-    self$remove_slot("_widget")
   }
   
   # Probably need to munge these events to ensure that the callback gets
@@ -49,3 +46,6 @@ Window <- Widget$clone()$do({
     )
   }  
 })
+
+
+w <- Window$clone()

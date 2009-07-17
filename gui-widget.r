@@ -5,16 +5,27 @@ Widget <- Object$clone()$do({
   init <- function() {
     self$expand <- FALSE
     self$anchor <- c(0, 0)
+    self$widget <- self$build_widget()
   }
+  
+  # Should be override in children to create the appropriate widget.
+  build_widget <- function() {}
   
   set_slot <- function(name, value) {
     # If a widget, add to container widget
     if (is.io(value) && value$has_slot("parent")) {
       self$add(value, self$expand, self$anchor)
-    } 
-    core(self)$set_slot(name, value)
+    }
+
+    # Use usual setting process - 
+    # FIXME: use parent not copy and paste
+    settor <- paste("set", name, sep = "_")
+    if (self$has_slot(settor)) {
+      self$get_slot(settor)(value)
+    } else {
+      core(self)$set_slot(name, value)      
+    }
   }
-  
   
   set_visible <- function(value) {
     visible(self$widget) <- value
@@ -31,11 +42,6 @@ Widget <- Object$clone()$do({
   }
   get_enabled <- function() {
     enabled(self$widget)
-  }
-  
-  get_widget <- function() {
-    if (self$has_slot("_widget")) return(self$get_slot("_widget"))
-    self$`_widget` <- self$build_widget()
   }
   
   set_tooltip <- function(value) {
