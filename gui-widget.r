@@ -5,6 +5,11 @@ Widget <- Object$clone()$do({
     self$widget <- self$build_widget()
   }
   
+  #' @TODO Fix scoping issue here
+  add <- function(widget, expand, anchor) {
+    gWidgets::add(self$widget, widget$widget, expand = expand, anchor = anchor)
+  }
+  
   # Should be override in children to create the appropriate widget.
   build_widget <- function() {}
   
@@ -15,7 +20,6 @@ Widget <- Object$clone()$do({
     
     # If a widget, add to container widget
     if (is.io(value) && value$has_slot("build_widget")) {
-      message("Adding widget ", name)
       self$add(value, self$expand, self$anchor)
     }
 
@@ -27,6 +31,7 @@ Widget <- Object$clone()$do({
     } else {
       core(self)$set_slot(name, value)      
     }
+    self
   }
   
   set_visible <- function(value) {

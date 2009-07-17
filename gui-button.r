@@ -26,9 +26,10 @@ Button <- Widget$clone()$do({
   
   add_handler <- function(event, callback) {
     switch(event, 
-      on_click = addhandler(self$widget, callback),
+      on_click = addHandlerClicked(self$widget, callback),
       stop("Unknown event", event, call. = FALSE)
     )
+    self
   }
   
 })
