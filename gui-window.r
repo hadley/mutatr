@@ -1,42 +1,42 @@
+source("gui-widget.r")
+
 Window <- Widget$clone()$do({
   init <- function() {
-    self$handlers <- NULL
+    self$widget <- self$build_widget()
   }
   
   events <- c("destroy", "unrealize")
   handlers <- list()
   
-  __set_title <- function(title) {
+  set_title <- function(title) {
     svalue(self$widget) <- title
   }
     
   build_widget <- function() {
-    gwindow(self$title, self$visible,
-      width = self$width, height = self$height, parent = self$parent)
+    gwindow(visible = FALSE)
   }
   
-  __set_size <- function(width, height) {
+  set_size <- function(width, height) {
     size(self$widget) <- c(self$width, self$height)
   }
   
-  __get_size <- function() {
+  get_size <- function() {
     size(self$widget)
   }
   
-  __set_default <- function(widget) {
+  set_default <- function(widget) {
     defaultWidget(self$widget) <- widget$widget
   }
   
   # Makes the window visible by setting visible to true.
   show <- function() {
-    self$visible <- TRUE
-    self
+    self$set_visible(TRUE)
   }
   
   # Close window.  
   close <- function() {
     dispose(self$widget)
-    self$_widget <- NULL
+    self$remove_slot("_widget")
   }
   
   # Probably need to munge these events to ensure that the callback gets
@@ -46,8 +46,6 @@ Window <- Widget$clone()$do({
       on_destroy = addhandlerdestroy(self$widget, callback),
       on_unrealize = addhandleunrealise(self$widget, callback),
       stop("Unknown event", event, call. = FALSE)
-    })
-  }
-  
-  
+    )
+  }  
 })

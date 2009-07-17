@@ -1,4 +1,5 @@
-library(gwidgets)
+library(gWidgets)
+source("object-inheritance.r")
 
 Widget <- Object$clone()$do({
   init <- function() {
@@ -11,37 +12,37 @@ Widget <- Object$clone()$do({
     if (is.io(value) && value$has_slot("parent")) {
       self$add(value, self$expand, self$anchor)
     } 
-    parent$set_slot(name, value)      
+    core(self)$set_slot(name, value)
   }
   
   
-  __set_visible <- function(value) {
+  set_visible <- function(value) {
     visible(self$widget) <- value
     self
   }
   
-  __get_visible <- function(value) {
+  get_visible <- function(value) {
     visible(self$widget)
   }
-
-  __set_enabled <- function(value) {
+  
+  set_enabled <- function(value) {
     enabled(self$widget) <- value
     self
   }
-  __get_enabled <- function() {
+  get_enabled <- function() {
     enabled(self$widget)
   }
   
-  __get_widget <- function() {
-    if (!is.null(self$_widget)) return(self$_widget)
-    self$_widget <- self$build_widget()
+  get_widget <- function() {
+    if (self$has_slot("_widget")) return(self$get_slot("_widget"))
+    self$`_widget` <- self$build_widget()
   }
   
-  __set_tooltip <- function(value) {
+  set_tooltip <- function(value) {
     tooltip(self$widget) <- value
     self
   }
-  __get_tooltip <- function(value) {
+  get_tooltip <- function(value) {
     tooltip(self$widget)
   }
   
