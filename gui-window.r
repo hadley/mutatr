@@ -6,6 +6,10 @@ Window <- Widget$clone()$do({
     gwindow(visible = FALSE)
   }
   
+  add <- function(widget, expand, anchor) {
+    gWidgets::add(self$widget, widget$widget, expand = expand, anchor = anchor)
+  }
+  
   set_title <- function(title) {
     svalue(self$widget) <- title
   }

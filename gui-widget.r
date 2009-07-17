@@ -9,8 +9,13 @@ Widget <- Object$clone()$do({
   build_widget <- function() {}
   
   set_slot <- function(name, value) {
+    # If the object is identical, don't need to set it.  This happens when
+    # processing a$b$c <- "d"
+    if (identical(value, self$get_slot(name))) return()
+    
     # If a widget, add to container widget
-    if (is.io(value) && value$has_slot("parent")) {
+    if (is.io(value) && value$has_slot("build_widget")) {
+      message("Adding widget ", name)
       self$add(value, self$expand, self$anchor)
     }
 

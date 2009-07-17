@@ -1,16 +1,20 @@
-Button <- Object$clone()$do({
+Button <- Widget$clone()$do({
   
-  __set_border <- function(value) {
+  build_widget <- function() {
+    gbutton()
+  }
+  
+  set_border <- function(value) {
     border(self$widget) <- value
   }
-  __get_border <- function() {
+  get_border <- function() {
     border(self$widget)
   }
   
-  __set_label <- function(value) {
+  set_label <- function(value) {
     svalue(self$widget) <- value
   }
-  __get_label <- function(){
+  get_label <- function(){
     svalue(self$widget)
   }
   
@@ -24,7 +28,7 @@ Button <- Object$clone()$do({
     switch(event, 
       on_click = addhandler(self$widget, callback),
       stop("Unknown event", event, call. = FALSE)
-    })
+    )
   }
   
 })

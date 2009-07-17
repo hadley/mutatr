@@ -26,15 +26,13 @@ Object$do({
     self
   }
 
-  clone <- function(name = NULL) {
+  #' @params ... All arguments passed on to init method
+  clone <- function(...) {
     aclone <- list(core(self)$clone()) 
     core(aclone)$set_slot("protos", list(self))
     aclone <- structure(aclone, class = "io")
     
-    if (!is.null(name)) {
-      aclone$.name <- name
-    }
-    aclone$init() # initialise cloned object
+    aclone$init(...) # initialise cloned object
     aclone
   }
   init <- function() {}
