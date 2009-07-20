@@ -5,12 +5,10 @@ To do
 
  * Proper iteration over ancestors (avoid cycles!)
  * Implement forward
- * Implement gettor and settor methods
  * Implement has_slot methods similarly
  * Implement deeper clone that calls init all the way down
  * Figure out how to do call methods in the parent (will self$parent work?)
  * Email Luke and ask about alternative methods
- * Set self for do
 
 
 Ideas for documentation
