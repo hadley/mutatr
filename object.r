@@ -39,19 +39,7 @@ Object$do <- function(expr) {
   env$self <- self
   eval(substitute(expr), env)
   self
-
-  # env <- new.env(parent = globalenv())
-  # eval(substitute(expr), env)
-  # self$load_enviro(env)
 }
-# Object$load_enviro <- function(env) {
-#   for(name in ls(env, all = TRUE)) {
-#     self$set_slot(name, get(name, env))
-#   }
-#   
-#   self
-# }
-
 
 Object$do({
   self$.name <- "Object"

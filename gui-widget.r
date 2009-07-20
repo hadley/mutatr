@@ -5,9 +5,8 @@ Widget <- Object$clone()$do({
     self$widget <- self$build_widget()
   }
   
-  #' @TODO Fix scoping issue here
   self$add <- function(widget, expand = widget$expand, anchor = widget$anchor) {
-    gWidgets::add(self$widget, widget$widget, expand = expand, anchor = anchor)
+    add(self$widget, widget$widget, expand = expand, anchor = anchor)
     self
   }
   
