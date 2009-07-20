@@ -1,11 +1,11 @@
 source("object.r")
 
 Object$do({
-  protos <- list()
+  self$protos <- list()
   
   # ' Add prototype to end of inheritance chain
   # ' @returns self
-  append_proto <- function(proto) {
+  self$append_proto <- function(proto) {
     stopifnot(is.io(proto))
     self$protos <- c(self$protos, list(proto))
     self
@@ -13,13 +13,13 @@ Object$do({
   
   #' Add prototype to start of inheritance chain
   #' @returns self
-  prepend_proto <- function(proto) {
+  self$prepend_proto <- function(proto) {
     stopifnot(is.io(proto))
     self$protos <- c(list(proto), self$protos)
     self
   }
   
-  remove_proto <- function(proto) {
+  self$remove_proto <- function(proto) {
     stopifnot(is.io(proto))
     pos <- unlist(lapply(self$protos, identical, proto))
     self$protos <- self$protos[!pos]
@@ -27,7 +27,7 @@ Object$do({
   }
 
   #' @params ... All arguments passed on to init method
-  clone <- function(...) {
+  self$clone <- function(...) {
     aclone <- list(core(self)$clone()) 
     core(aclone)$set_slot("protos", list(self))
     aclone <- structure(aclone, class = "io")
@@ -35,9 +35,9 @@ Object$do({
     aclone$init(...) # initialise cloned object
     aclone
   }
-  init <- function() {}
+  self$init <- function() {}
 
-  has_slot <- function(name) {
+  self$has_slot <- function(name) {
     if (self$has_local_slot(name)) return(TRUE)
     
     for(proto in self$protos) {
@@ -47,7 +47,7 @@ Object$do({
     return(FALSE)
   }
 
-  set_slot <- function(name, value) {
+  self$set_slot <- function(name, value) {
     settor <- paste("set", name, sep = "_")
     if (self$has_slot(settor)) {
       self$get_slot(settor)(value)
@@ -56,14 +56,14 @@ Object$do({
     }
   }
   
-  get_slot <- function(name) {
-    .get_slot(self, name)
+  self$get_slot <- function(name) {
+    get_slot(self, name)
   }
 
 })
 
 "$.io" <- function(x, i, ...) {
-  res <- .get_slot(x, i)
+  res <- get_slot(x, i)
   
   if (is.null(res)) 
     stop("Field ", i, " not found in object ", substitute(x), call. = FALSE)    
@@ -71,7 +71,7 @@ Object$do({
   object_scope(res, x)
 }
 
-.get_slot <- function(obj, name, scope = obj) {
+get_slot <- function(obj, name, scope = obj) {
   # First check to see if a gettor function exists
   gettor <- paste("get", name, sep = "_")
   if (core(obj)$has_local_slot(gettor)) {
@@ -92,7 +92,7 @@ Object$do({
 
 .get_slot_in_parents <- function(obj, name, scope = obj) {
   for(proto in core(obj)$get_local_slot("protos")) {
-    res <- .get_slot(proto, name, scope = scope)
+    res <- get_slot(proto, name, scope = scope)
     if (!is.null(res)) return(res)
   }
 

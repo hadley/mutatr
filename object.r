@@ -36,57 +36,62 @@ object_scope <- function(res, self) {
 # temporary environment and then copy everything across with set_slot. 
 Object$do <- function(expr) {
   env <- new.env(parent = globalenv())
+  env$self <- self
   eval(substitute(expr), env)
-  self$load_enviro(env)
-}
-Object$load_enviro <- function(env) {
-  for(name in ls(env, all = TRUE)) {
-    self$set_slot(name, get(name, env))
-  }
-  
   self
+
+  # env <- new.env(parent = globalenv())
+  # eval(substitute(expr), env)
+  # self$load_enviro(env)
 }
+# Object$load_enviro <- function(env) {
+#   for(name in ls(env, all = TRUE)) {
+#     self$set_slot(name, get(name, env))
+#   }
+#   
+#   self
+# }
 
 
 Object$do({
-  .name <- "Object"
+  self$.name <- "Object"
   
-  do_string <- function(text) {
+  self$do_string <- function(text) {
     env <- new.env(parent = globalenv())
     eval(parse(text = text), env)
     self$load_enviro(env)
   }
   
   #' @param chdir change working directory when evaluating code in file?
-  do_file <- function(path, chdir = TRUE) {
+  self$do_file <- function(path, chdir = TRUE) {
     env <- new.env(parent = globalenv())
     sys.source(path, env, chdir = chdir)
     self$load_enviro(env)
   }
   
-  remove_slot <- function(name) {
+  self$remove_slot <- function(name) {
     core(self)$remove_slot(name)
   }
   
-  slot_names <- function() {
+  self$slot_names <- function() {
     core(self)$slot_names()
   }
   
-  has_local_slot <- function(name) {
+  self$has_local_slot <- function(name) {
     core(self)$has_local_slot(name)
   }
-  get_local_slot <- function(name) {
+  self$get_local_slot <- function(name) {
     core(self)$get_local_slot(name)
   }
   
-  update_slot <- function(name, value) {
+  self$update_slot <- function(name, value) {
     if (!self$has_slot(name)) {
       stop("Slot does not exist")
     }
     self$set_slot(name, value)
   }
   
-  slot_summary <- function() {
+  self$slot_summary <- function() {
     names <- setdiff(self$slot_names(), c("name", "protos"))
     descriptions <- unlist(lapply(names, self$slot_desc))
     descriptions <- gsub("^ +| +$", "", descriptions)
@@ -97,15 +102,15 @@ Object$do({
     noquote(out)
   }
   
-  slot_desc <- function(name) {
+  self$slot_desc <- function(name) {
     capture.output(str(self$get_local_slot(name), max.level = 1, give.attr=F))
   }
 
-  as_string <- function(...) {
+  self$as_string <- function(...) {
     paste(self$.name, " <", envname(core(self)), ">", sep = "")
   }
   
-  print <- function(...) {
+  self$print <- function(...) {
     cat(self$as_string(...), "\n", sep = "")
   }
 })

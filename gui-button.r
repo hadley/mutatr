@@ -1,30 +1,35 @@
 Button <- Widget$clone()$do({
   
-  build_widget <- function() {
+  self$init <- function(label = "") {
+    self$widget <- self$build_widget()
+    self$label <- label
+  }
+  
+  self$build_widget <- function() {
     gbutton()
   }
   
-  set_border <- function(value) {
+  self$set_border <- function(value) {
     border(self$widget) <- value
   }
-  get_border <- function() {
+  self$get_border <- function() {
     border(self$widget)
   }
   
-  set_label <- function(value) {
+  self$set_label <- function(value) {
     svalue(self$widget) <- value
   }
-  get_label <- function(){
+  self$get_label <- function(){
     svalue(self$widget)
   }
   
-  click <- function() {
+  self$click <- function() {
     # Is it possible to do this with gwidgets?
     # Or should I just manually run all of the matching handlers (if I can
     # find them), and then set svalue appropriately for each widget
   }
   
-  add_handler <- function(event, callback) {
+  self$add_handler <- function(event, callback) {
     switch(event, 
       on_click = addHandlerClicked(self$widget, callback),
       stop("Unknown event", event, call. = FALSE)

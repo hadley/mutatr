@@ -1,27 +1,29 @@
 Group <- Widget$clone()$do({
-  init <- function(dir = "h") {
+  self$init <- function(dir = "h") {
     dir <- match.arg(dir, c("horizontal", "vertical"))
     self$horizontal <- dir == "horizontal"
     self$widget <- self$build_widget()    
   }
   
-  build_widget <- function() {
+  self$build_widget <- function() {
     ggroup(hor = self$horizontal)
   }
 
-  set_padding <- function(value) {
+  self$set_padding <- function(value) {
     svalue(self$widget) <- value
   }
-  get_padding <- function() {
+  self$get_padding <- function() {
     svalue(self)
   }
   
-  add_space <- function(amount) {
+  self$add_space <- function(amount) {
     addSpace(self$widget, amount)
+    self
   }
   
-  add_spring <- function() {
+  self$add_spring <- function() {
     addSpring(self$widget)
+    self
   }
  
 })

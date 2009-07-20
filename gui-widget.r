@@ -1,19 +1,20 @@
 Widget <- Object$clone()$do({
-  init <- function() {
+  self$init <- function() {
     self$expand <- FALSE
     self$anchor <- c(0, 0)
     self$widget <- self$build_widget()
   }
   
   #' @TODO Fix scoping issue here
-  add <- function(widget, expand, anchor) {
+  self$add <- function(widget, expand = widget$expand, anchor = widget$anchor) {
     gWidgets::add(self$widget, widget$widget, expand = expand, anchor = anchor)
+    self
   }
   
   # Should be override in children to create the appropriate widget.
-  build_widget <- function() {}
+  self$build_widget <- function() {}
   
-  set_slot <- function(name, value) {
+  self$set_slot <- function(name, value) {
     # If the object is identical, don't need to set it.  This happens when
     # processing a$b$c <- "d"
     if (identical(value, self$get_slot(name))) return()
@@ -34,28 +35,28 @@ Widget <- Object$clone()$do({
     self
   }
   
-  set_visible <- function(value) {
+  self$set_visible <- function(value) {
     visible(self$widget) <- value
     self
   }
   
-  get_visible <- function(value) {
+  self$get_visible <- function(value) {
     visible(self$widget)
   }
   
-  set_enabled <- function(value) {
+  self$set_enabled <- function(value) {
     enabled(self$widget) <- value
     self
   }
-  get_enabled <- function() {
+  self$get_enabled <- function() {
     enabled(self$widget)
   }
   
-  set_tooltip <- function(value) {
+  self$set_tooltip <- function(value) {
     tooltip(self$widget) <- value
     self
   }
-  get_tooltip <- function(value) {
+  self$get_tooltip <- function(value) {
     tooltip(self$widget)
   }
   
