@@ -8,7 +8,6 @@ To do
  * Implement has_slot methods similarly
  * Implement deeper clone that calls init all the way down
  * Figure out how to do call methods in the parent (will self$parent work?)
- * Email Luke and ask about alternative methods
 
 
 Ideas for documentation
