@@ -15,7 +15,6 @@ source("object-inheritance.r")
 #   * radio
 #   * separator
 #   * slider
-#   * statusbar
 #   * table
 #   * text
 #   * tree
@@ -24,6 +23,7 @@ source("gui-window.r")
 source("gui-button.r")
 source("gui-group.r")
 source("gui-label.r")
+source("gui-status-bar.r")
 
 # Advantages:
 #   * don't have to worry about polluting global namespace
@@ -32,6 +32,7 @@ source("gui-label.r")
 #   * can use lexical scoping for private/local functions/variables
 
 w2 <- Window$clone()$do({
+  self$status <- StatusBar$clone()
   self$title <- "Hello"
   
   self$buttons <- Group$clone("v")$do({
