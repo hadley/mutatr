@@ -2,6 +2,23 @@
 library(gWidgets)
 source("object-inheritance.r")
 
+# TO DO
+#   * checkbox
+#   * checkboxgroup
+#   * combobox
+#   * edit
+#   * image
+#   * layout
+#   * menu
+#   * notebook
+#   * panedgroup
+#   * radio
+#   * separator
+#   * slider
+#   * statusbar
+#   * table
+#   * text
+#   * tree
 source("gui-widget.r")
 source("gui-window.r")
 source("gui-button.r")
