@@ -6,6 +6,7 @@ source("gui-widget.r")
 source("gui-window.r")
 source("gui-button.r")
 source("gui-group.r")
+source("gui-label.r")
 
 # Advantages:
 #   * don't have to worry about polluting global namespace
@@ -17,6 +18,7 @@ w2 <- Window$clone()$do({
   self$title <- "Hello"
   
   self$buttons <- Group$clone("v")$do({
+    self$add(Label$clone("These are some <b>buttons</b>"))
     # When you don't want to access later
     self$add(Button$clone("One")$
       add_handler("on_click", function(...) print("hi"))
