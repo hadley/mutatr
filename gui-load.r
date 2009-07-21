@@ -24,6 +24,7 @@ source("gui-group.r")
 source("gui-label.r")
 source("gui-status-bar.r")
 source("gui-combobox.r")
+source("gui-checkbox.r")
 
 # Advantages:
 #   * don't have to worry about polluting global namespace
@@ -46,8 +47,6 @@ w2 <- Window$clone()$do({
     self$two <- Button$clone("Two")
     self$add_space(10)
     self$three <- Button$clone("Three")
-    
-    self$add(Combobox$clone(1:5), T)
   })
   
 })  

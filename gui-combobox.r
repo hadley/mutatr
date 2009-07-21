@@ -4,10 +4,10 @@ Combobox <- Widget$clone()$do({
     self$widget <- gcombobox(items, editable = editable)
   }
 
-  self$get_value <- function(value) {
+  self$set_value <- function(value) {
     svalue(self$widget) <- value
   }
-  self$set_value <- function(){
+  self$get_value <- function(){
     svalue(self$widget)
   }
   
