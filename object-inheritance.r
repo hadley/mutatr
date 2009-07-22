@@ -35,7 +35,7 @@ Object$do({
     aclone$init(...) # initialise cloned object
     aclone
   }
-  self$init <- function() {}
+  self$init <- function(...) {}
 
   self$has_slot <- function(name) {
     if (self$has_local_slot(name)) return(TRUE)
