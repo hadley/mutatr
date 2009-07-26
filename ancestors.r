@@ -12,7 +12,7 @@ ancestor_iterator <- function(proto) {
     nxt <- pop()
     
     done <<- c(done, list(nxt))
-    todo <<- c(nxt$protos, todo)
+    todo <<- c(core(nxt)$get_local_slot("protos"), todo)
     remove_seen()
     
     nxt

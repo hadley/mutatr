@@ -1,3 +1,4 @@
+source("ancestors.r")
 source("object.r")
 
 Object$do({
@@ -38,12 +39,12 @@ Object$do({
   self$init <- function(...) {}
 
   self$has_slot <- function(name) {
-    if (self$has_local_slot(name)) return(TRUE)
+    iter <- ancestor_iterator(self)
+    while(iter$has_next()) {
+      ancestor <- iter$get_next()
     
-    for(proto in self$protos) {
-      if (proto$has_slot(name)) return (TRUE)
+      if (self$has_local_slot(name)) return(TRUE)
     }
-    
     return(FALSE)
   }
 
@@ -64,44 +65,31 @@ Object$do({
 
 "$.io" <- function(x, i, ...) {
   res <- get_slot(x, i)
-  
-  if (is.null(res)) 
-    stop("Field ", i, " not found in object ", substitute(x), call. = FALSE)    
-  
-  object_scope(res, x)
+  if (!is.null(res)) return(res)
+
+  stop("Field ", i, " not found in object ", deparse(substitute(x)), 
+    call. = FALSE) 
 }
 
 get_slot <- function(obj, name, scope = obj) {
-  # First check to see if a gettor function exists
-  gettor <- paste("get", name, sep = "_")
-  if (core(obj)$has_local_slot(gettor)) {
-    res <- core(obj)$get_local_slot(gettor)
-    res <- object_scope(res, scope)
-    return(res())
+  iter <- ancestor_iterator(obj)
+  while(iter$has_next()) {
+    ancestor <- iter$get_next()
+    
+    # Check if a gettor function exists
+    gettor <- paste("get", name, sep = "_")
+    if (core(ancestor)$has_local_slot(gettor)) {
+      res <- core(ancestor)$get_local_slot(gettor)
+      res <- object_scope(res, scope)
+      return(res())
+    }
+    
+    # Otherwise just look for that slot 
+    if (core(ancestor)$has_local_slot(name)) {
+      res <- core(ancestor)$get_local_slot(name)
+      res <- object_scope(res, scope)
+      return(res)
+    }
   }
-  
-  # Deal with simple case first - the function is in the top level
-  if (core(obj)$has_local_slot(name)) {
-    res <- core(obj)$get_local_slot(name)
-    res <- object_scope(res, scope)
-    return(res)
-  }
-
-  .get_slot_in_parents(obj, name, scope)
-} 
-
-.get_slot_in_parents <- function(obj, name, scope = obj) {
-  for(proto in core(obj)$get_local_slot("protos")) {
-    res <- get_slot(proto, name, scope = scope)
-    if (!is.null(res)) return(res)
-  }
-
   NULL
 }
-
-a <- Object$clone()$do({
-  get_hadley <- function() runif(10)
-  set_hadley <- function(value) stop("Not allowed")
-})
-b <- a$clone()
-a$a <- 1
