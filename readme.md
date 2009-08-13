@@ -1,14 +1,12 @@
-This is a prototype-based programming package for R, heavily inspired by (io)[http://iolanguage.com/].
+This is a prototype-based programming package for R, heavily inspired by [io](http://iolanguage.com/) and javascript.
 
 To do
 ======
 
- * Proper iteration over ancestors (avoid cycles!)
  * Implement forward
- * Implement has_slot methods similarly
+ * Clean up has_slot
  * Implement deeper clone that calls init all the way down
  * Figure out how to do call methods in the parent (will self$parent work?)
-
 
 Ideas for documentation
 =======================
@@ -21,4 +19,3 @@ Other ideas
 ===========
 
  * Create new and inherit methods to illustrate how prototype based programming can be used to create a regular class based system
- * 
