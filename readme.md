@@ -4,8 +4,7 @@ To do
 ======
 
  * Implement forward
- * Clean up has_slot
- * Implement deeper clone that calls init all the way down
+ * Implement deeper clone that calls clone/init all the way down
  * Figure out how to do call methods in the parent (will self$parent work?)
 
 Ideas for documentation
