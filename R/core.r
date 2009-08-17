@@ -11,21 +11,6 @@
 Core <- local({
   core <- new.env(TRUE, emptyenv())
   
-  # protos <- list()
-  # #' Add prototype to end of inheritance chain
-  # append_proto <- function(proto) {
-  #   protos <<- c(protos, list(proto))    
-  # }
-  # 
-  # #' Add prototype to start of inheritance chain
-  # prepend_proto <- function(proto) {
-  #   protos <<- c(list(proto), protos)
-  # }
-  # 
-  # remove_proto <- function(proto) {
-  #   protos[pos] <<- NULL
-  # }
-  
   slot_names <- function() {
     ls(core)
   }
@@ -50,7 +35,6 @@ Core <- local({
   # R environment inheritance and syntax
   clone <- function() {
     aclone <- new.env(FALSE, self)
-    # aclone$protos <- list(core)
     aclone$core <- new.env(TRUE, emptyenv())
     structure(aclone, class = "core")
   }
@@ -59,6 +43,8 @@ Core <- local({
 })
 parent.env(Core) <- baseenv()
 
+# This slightly complicated code ensures that there is just one copy of the
+# accessor functions stored in the bottom environment.
 "$.core" <- function(x, i) {
   res <- get(i, x)
   if (is.function(res)) {

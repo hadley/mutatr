@@ -1,5 +1,5 @@
 source("utils.r")
-source("bootstrap.r")
+source("core.r")
 
 core <- function(x) x[[1]]
 
