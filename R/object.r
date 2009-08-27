@@ -100,12 +100,15 @@ Object$do({
     paste(self$.name, " <", envname(core(self)), ">", sep = "")
   }
   
-  self$print <- function(...) {
-    cat(self$as_string(...), "\n", sep = "")
+  self$format <- function(...) {
+    self$as_string(...)
   }
 })
 
 
+format.io <- function(x, ...) {
+  x$as_string(...)
+}
 print.io <- function(x, ...) {
-  x$print()
+  cat(format(x), "\n", sep = "")
 }
