@@ -3,7 +3,6 @@ This is a prototype-based programming package for R, heavily inspired by [io](ht
 To do
 ======
 
- * Implement forward
  * Implement deeper clone that calls clone/init all the way down
  * Figure out how to do call methods in the parent (will self$parent work?)
 

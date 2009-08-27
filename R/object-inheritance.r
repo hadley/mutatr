@@ -72,15 +72,16 @@ Object$do({
   self$get_slot <- function(name) {
     get_slot(self, name)
   }
+  
+  self$forward <- function(name) {
+    stop("Field ", name, " not found in ", format(self), 
+      call. = FALSE)     
+  }
 
 })
 
 "$.io" <- function(x, i, ...) {
-  res <- get_slot(x, i)
-  if (!is.null(res)) return(res)
-
-  stop("Field ", i, " not found in object ", deparse(substitute(x)), 
-    call. = FALSE) 
+  get_slot(x, i)
 }
 
 get_slot <- function(obj, name, scope = obj) {
@@ -102,6 +103,20 @@ get_slot <- function(obj, name, scope = obj) {
       res <- object_scope(res, scope)
       return(res)
     }
+    
   }
   NULL
+  
+  iter <- ancestor_iterator(obj)
+  while(iter$has_next()) {
+    ancestor <- iter$get_next()
+  
+    # Otherwise check for forward method, and call it.
+    if (core(ancestor)$has_local_slot("forward")) {
+      res <- core(ancestor)$get_local_slot("forward")
+      res <- object_scope(res, scope)
+      return(res(name))
+    }
+  }
+  
 }
