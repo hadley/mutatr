@@ -27,6 +27,17 @@ Object$do({
     self
   }
 
+  self$has_ancestor <- function(proto) {
+    i <- ancestor_iterator(self)
+    i$get_next() # Skip self
+
+    while(i$has_next()) {
+      if (identical(i$get_next(), proto)) return(TRUE)
+    }
+    return(FALSE)
+    
+  }
+
   #' @params ... All arguments passed on to init method
   self$clone <- function(...) {
     aclone <- list(core(self)$clone()) 

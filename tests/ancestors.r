@@ -9,6 +9,11 @@ assert_ancestors_are(a, list(Object))
 assert_ancestors_are(b, list(a, Object))
 assert_ancestors_are(c, list(b, a, Object))
 
+assert(c$has_ancestor(b))
+assert(c$has_ancestor(a))
+assert(c$has_ancestor(Object))
+assert(!c$has_ancestor(c))
+
 # Test circular case
 d <- Object$clone()
 e <- Object$clone()
