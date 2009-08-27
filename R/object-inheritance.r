@@ -105,13 +105,12 @@ get_slot <- function(obj, name, scope = obj) {
     }
     
   }
-  NULL
   
+  # If slot not found anywhere, try looking for a forward method
   iter <- ancestor_iterator(obj)
   while(iter$has_next()) {
     ancestor <- iter$get_next()
   
-    # Otherwise check for forward method, and call it.
     if (core(ancestor)$has_local_slot("forward")) {
       res <- core(ancestor)$get_local_slot("forward")
       res <- object_scope(res, scope)
