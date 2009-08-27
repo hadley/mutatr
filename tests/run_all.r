@@ -3,6 +3,6 @@ FILE <- frame_files[[length(frame_files)]]
 
 PATH <- dirname(FILE)
 
-tests <- setdiff(dir(PATH, full.names = TRUE), FILE)
+tests <- setdiff(dir(PATH, "test-", full.names = TRUE), FILE)
 
 lapply(tests, source, chdir = TRUE)
