@@ -51,10 +51,11 @@ Object$do({
 
   self$has_slot <- function(name) {
     iter <- ancestor_iterator(self)
+
     while(iter$has_next()) {
       ancestor <- iter$get_next()
     
-      if (self$has_local_slot(name)) return(TRUE)
+      if (ancestor$has_local_slot(name)) return(TRUE)
     }
     return(FALSE)
   }
