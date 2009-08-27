@@ -1,10 +1,4 @@
-assert_identical <- function(a, b) {
-  stopifnot(identical(a, b))
-}
-expect_error <- function(x) {
-  res <- try(force(x), TRUE)
-  stopifnot(inherits(res, "try-error"))
-}
+source("assert.r")
 
 a <- Object$clone()
 a$a <- 5

@@ -1,3 +1,4 @@
+source("assert.r")
 
 a <- Core$clone()
 a$set_slot("a", 1)
