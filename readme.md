@@ -4,7 +4,6 @@ To do
 ======
 
  * Implement deeper clone that calls clone/init all the way down
- * Figure out how to do call methods in the parent (will self$parent work?)
 
 Ideas for documentation
 =======================

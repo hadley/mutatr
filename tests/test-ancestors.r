@@ -26,7 +26,7 @@ test_context <- test <- function(...) {}
 test_context("Ancestor iterator")
 
 # ----------------------------------------------------------------------------
-test("Simple hierarchical case")  
+test("Simple hierarchical case")
 a <- Object$clone()
 b <- a$clone()
 c <- b$clone()

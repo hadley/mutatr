@@ -16,11 +16,19 @@ assert_ancestors_are <- function(obj, ancestors) {
 assert_identical <- function(a, b) {
   stopifnot(identical(a, b))
 }
-expect_error <- function(x) {
+expect_error <- function(x, message = NULL) {
   res <- try(force(x), TRUE)
+  
   stopifnot(inherits(res, "try-error"))
+  if (!is.null(message)) {
+    assert_matches(res, message)
+  }
 }
 
 assert <- function(x) {
   stopifnot(identical(x, TRUE))
+}
+
+assert_matches <- function(test, regexp) {
+  assert(all(grepl(regexp, test)))
 }

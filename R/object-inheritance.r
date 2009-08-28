@@ -27,8 +27,26 @@ Object$do({
     self
   }
 
+  self$i_ancestors <- function() {
+    ancestor_iterator(self)
+  }
+
+  self$parent <- function() {
+    if (length(self$protos) == 0) {
+      stop("Object has no parent")
+    }
+    
+    parent <- self$protos[[1]]
+    parents <- c(parent$protos, self$protos[-1])
+    
+    parent_obj <- self$clone()
+    parent_obj$protos <- parents
+    
+    parent
+  }
+
   self$has_ancestor <- function(proto) {
-    i <- ancestor_iterator(self)
+    i <- self$i_ancestors()
     i$get_next() # Skip self
 
     while(i$has_next()) {
@@ -50,7 +68,7 @@ Object$do({
   self$init <- function(...) {}
 
   self$has_slot <- function(name) {
-    iter <- ancestor_iterator(self)
+    iter <- self$i_ancestors()
 
     while(iter$has_next()) {
       ancestor <- iter$get_next()
@@ -86,6 +104,7 @@ Object$do({
 
 get_slot <- function(obj, name, scope = obj) {
   iter <- ancestor_iterator(obj)
+  
   while(iter$has_next()) {
     ancestor <- iter$get_next()
     
@@ -117,5 +136,4 @@ get_slot <- function(obj, name, scope = obj) {
       return(res(name))
     }
   }
-  
 }
