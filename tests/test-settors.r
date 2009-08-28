@@ -1,6 +1,6 @@
 context("Settors")
  
-test("Test base case", {
+test_that("simple case works", {
   a <- Object$clone()
 
   a$set_double <- function(value) {
@@ -11,7 +11,12 @@ test("Test base case", {
   assert_identical(a$double, 10)
 })
 
-test("Test inheritance", {
+test_that("settors are inherited", {
+  a <- Object$clone()
+  a$set_double <- function(value) {
+    core(self)$set_slot("double", value * 2)
+  }
+
   b <- a$clone()
 
   b$double <- 5

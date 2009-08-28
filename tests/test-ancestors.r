@@ -1,7 +1,7 @@
 context("Ancestor iterator")
 
 # ----------------------------------------------------------------------------
-test("Simple hierarchical case", {
+test_that("simple hierarchical case works", {
   a <- Object$clone()
   b <- a$clone()
   c <- b$clone()
@@ -17,7 +17,7 @@ test("Simple hierarchical case", {
 })
 
 # ----------------------------------------------------------------------------
-test("Circular case", {
+test_that("circular case works", {
   d <- Object$clone()
   e <- Object$clone()
   e$append_proto(d)

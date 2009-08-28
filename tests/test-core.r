@@ -1,6 +1,6 @@
 context("Core")
 
-test("Set, get & clone", {
+test_that("set, get & clone work", {
   a <- Core$clone()
   a$set_slot("a", 1)
   a$get_local_slot("a")

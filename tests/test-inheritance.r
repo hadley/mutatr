@@ -1,6 +1,6 @@
 context("Inheritance")
 
-test("Values in parent should be inherited by children", {
+test_that("values in parent inherited by children", {
   a <- Object$clone()
   a$a <- 5
 
@@ -13,7 +13,7 @@ test("Values in parent should be inherited by children", {
 })
 
 
-test("Values in children should override parents", {
+test_that("values in children override values in parent", {
   a <- Object$clone()
   b <- a$clone()
   c <- b$clone()

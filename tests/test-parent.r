@@ -1,10 +1,10 @@
 context("Test parent function")
 
-test("Object shouldn't have a parent", {
+test_that("object doesn't have a parent", {
   expect_error(Object$parent(), "no parent")
 })
 
-test("Simple linear inheritance", {
+test_that("simple linear inheritance works", {
   a <- Object$clone()
   a$a <- 5
 
@@ -24,7 +24,7 @@ test("Simple linear inheritance", {
   assert_identical(c$f(), 3)
 })
 
-test("Test circular inheritance", {
+test_that("circular inheritance works", {
   d <- Object$clone()
   e <- Object$clone()
   e$prepend_proto(d)
@@ -41,7 +41,7 @@ test("Test circular inheritance", {
   assert_identical(e$parent()$parent()$a, 2)
 })
 
-test("Assignment should happen in original object", {
+test_that("assignment should happen in original object", {
   a <- Object$clone()
   b <- a$clone()
 

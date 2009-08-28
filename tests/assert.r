@@ -81,7 +81,7 @@ context <- function(desc) {
   cat(desc, "\n")
 }
 
-test <- function(desc, code) {
+test_that <- function(desc, code) {
   cat("  ", desc, ": ", sep = "")
   
   env <- new.env(parent = globalenv())
