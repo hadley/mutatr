@@ -36,14 +36,41 @@ Object$do({
       stop("Object has no parent")
     }
     
-    parent <- self$protos[[1]]
-    parents <- c(parent$protos, self$protos[-1])
+    if (!core(self)$has_local_slot(".is_parent")) {
+      # To find the parent of an object, just create a new object with
+      # the same protos, but no locally defined slots
+      parent_obj <- Object$clone()
+      parent_obj$protos <- self$protos
+    } else {
+      # To find the parent of a parent, take the first parent proto, and
+      # replace with its parents
+      parent <- self$protos[[1]]
+      parents <- c(parent$protos, self$protos[-1])
+      
+      parent_obj <- Object$clone()
+      parent_obj$protos <- parents
+    }
+    parent_obj$.is_parent <- TRUE    
+    parent_obj$.context <- get_context(self)
     
-    parent_obj <- self$clone()
-    parent_obj$protos <- parents
+    # Over-ride set slot so that all setting happens in the corrent context:
+    # the original object
+    parent_obj$set_slot <- function(name, value) {
+      parent_obj$.context$set_slot(name, value)
+    }
     
-    parent
+    parent_obj
   }
+
+  self$get_context <- function() {
+    get_context(self)
+  }
+
+  # self$set_context <- function(value) {
+  #   message("Setting context")
+  #   self$set_slot(".context", value)
+  # }
+  # 
 
   self$has_ancestor <- function(proto) {
     i <- self$i_ancestors()
@@ -100,6 +127,14 @@ Object$do({
 
 "$.io" <- function(x, i, ...) {
   get_slot(x, i)
+}
+
+get_context <- function(obj) {
+  if (core(obj)$has_local_slot(".context")) {
+    core(obj)$get_local_slot(".context")
+  } else {
+    obj
+  }
 }
 
 get_slot <- function(obj, name, scope = obj) {

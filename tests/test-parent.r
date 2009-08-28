@@ -1,3 +1,4 @@
+
 # Object doesn't have a parent
 expect_error(Object$parent(), "no parent")
 
@@ -36,3 +37,25 @@ assert_identical(d$parent()$parent()$a, 1)
 assert_identical(e$a, 2)
 assert_identical(e$parent()$a, 1)
 assert_identical(e$parent()$parent()$a, 2)
+
+
+# Test that assignment happens in the right place
+a <- Object$clone()
+b <- a$clone()
+
+# Check contexts
+assert_identical(a$context, a)
+assert_identical(a$parent()$context, a)
+assert_identical(b$context, b)
+assert_identical(b$parent()$context, b)
+
+a$a <- 10
+b$a <- 15
+a$f <- function() {
+  self$a <- 5
+}
+b$f <- function() self$parent()$f()
+
+b$f()
+assert_identical(a$a, 10)
+assert_identical(b$a, 5)
