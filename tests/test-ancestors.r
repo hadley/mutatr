@@ -1,6 +1,5 @@
 context("Ancestor iterator")
 
-# ----------------------------------------------------------------------------
 test_that("simple hierarchical case works", {
   a <- Object$clone()
   b <- a$clone()
@@ -16,7 +15,6 @@ test_that("simple hierarchical case works", {
   assert(!c$has_ancestor(c))
 })
 
-# ----------------------------------------------------------------------------
 test_that("circular case works", {
   d <- Object$clone()
   e <- Object$clone()

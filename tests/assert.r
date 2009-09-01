@@ -17,11 +17,7 @@
 # assert assert_equal   assert_in_delta   assert_instance_of  
 # assert_match   assert_null   assert_no_match  
 # assert_not_equal   assert_not_null assert_nothing_thrown assert_throws 
-# 
-# should_be_error
-# should_be_identical
-# should_be_true
-# 
+#
 # 
 # should_be_same_as_last_time
 #   default lookup default should hash of deparse + current test context
