@@ -25,3 +25,13 @@ test_that("values in children override values in parent", {
   assert_identical(b$b, 5)
   assert_identical(c$b, 10)
 })
+
+test_that("inheritance is dynamic", {
+  a <- Object$clone()
+  a$a <- 1
+
+  b <- a$clone()
+  a$b <- 2
+
+  assert_identical(b$b, 2)
+})
