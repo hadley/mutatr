@@ -8,7 +8,7 @@ test_that("simple case works", {
   }
 
   a$double <- 5
-  assert_identical(a$double, 10)
+  expect_that(a$double, equals(10))
 })
 
 test_that("settors are inherited", {
@@ -20,5 +20,5 @@ test_that("settors are inherited", {
   b <- a$clone()
 
   b$double <- 5
-  assert_identical(b$double, 10)
+  expect_that(b$double, equals(10))
 })

@@ -7,11 +7,10 @@ test_that("values in parent inherited by children", {
   b <- a$clone()
   c <- b$clone()
 
-  assert_identical(a$a, 5)
-  assert_identical(b$a, 5)
-  assert_identical(c$a, 5)
+  expect_that(a$a, equals(5))
+  expect_that(b$a, equals(5))
+  expect_that(c$a, equals(5))
 })
-
 
 test_that("values in children override values in parent", {
   a <- Object$clone()
@@ -21,9 +20,9 @@ test_that("values in children override values in parent", {
   b$b <- 5
   c$b <- 10
 
-  expect_error(a$b)
-  assert_identical(b$b, 5)
-  assert_identical(c$b, 10)
+  expect_that(a$b, throws_error("not found"))
+  expect_that(b$b, equals(5))
+  expect_that(c$b, equals(10))
 })
 
 test_that("inheritance is dynamic", {
@@ -33,5 +32,5 @@ test_that("inheritance is dynamic", {
   b <- a$clone()
   a$b <- 2
 
-  assert_identical(b$b, 2)
+  expect_that(b$b, equals(2))
 })

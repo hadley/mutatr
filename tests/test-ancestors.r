@@ -5,14 +5,14 @@ test_that("simple hierarchical case works", {
   b <- a$clone()
   c <- b$clone()
 
-  assert_has_ancestors(a, list(Object))
-  assert_has_ancestors(b, list(a, Object))
-  assert_has_ancestors(c, list(b, a, Object))
+  expect_that(a, has_ancestors(Object))
+  expect_that(b, has_ancestors(a, Object))
+  expect_that(c, has_ancestors(b, a, Object))
 
-  assert(c$has_ancestor(b))
-  assert(c$has_ancestor(a))
-  assert(c$has_ancestor(Object))
-  assert(!c$has_ancestor(c))
+  expect_that(c$has_ancestor(b), is_true())
+  expect_that(c$has_ancestor(a), is_true())
+  expect_that(c$has_ancestor(Object), is_true())
+  expect_that(c$has_ancestor(c), is_false())
 })
 
 test_that("circular case works", {
@@ -21,6 +21,6 @@ test_that("circular case works", {
   e$append_proto(d)
   d$append_proto(e)
 
-  assert_has_ancestors(e, list(Object, d))
-  assert_has_ancestors(d, list(Object, e))
+  expect_that(e, has_ancestors(Object, d))
+  expect_that(d, has_ancestors(Object, e))
 })
