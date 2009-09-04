@@ -1,6 +1,3 @@
-source("ancestors.r")
-source("object.r")
-
 Object$do({
   self$protos <- list()
   

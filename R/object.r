@@ -1,6 +1,3 @@
-source("utils.r")
-source("core.r")
-
 core <- function(x) x[[1]]
 
 # Set up minimal object - just need to be add new slots

@@ -1,0 +1,13 @@
+Package: mutatr
+Type: Package
+Title: Mutable objects for R.
+Version: 0.1
+Author: Hadley Wickham <h.wickham@gmail.com>
+Maintainer: Hadley Wickham <h.wickham@gmail.com>
+Description: Mutable prototype based objects with multiple inheritance.
+URL: http://had.co.nz/
+Depends: digest
+License: GPL
+LazyData: true
+Collate: 'utils.r' 'core.r' 'ancestors.r' 'object.r' 'object-inheritance.r'
+
