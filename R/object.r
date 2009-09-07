@@ -49,7 +49,7 @@ Object$do({
   
   #' @param chdir change working directory when evaluating code in file?
   self$do_file <- function(path, chdir = TRUE) {
-    env <- new.env(parent = globalenv())
+    env <- new.env(parent = parent.frame())
     env$self <- self
     sys.source(path, env, chdir = chdir)
     self
