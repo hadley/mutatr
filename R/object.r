@@ -1,7 +1,7 @@
 core <- function(x) x[[1]]
 
 # Set up minimal object - just need to be add new slots
-Object <- structure(list(Core$clone()), class = "io")
+Object <- structure(list(Core$clone()), class = "mutatr")
 core(Object)$set_slot("set_slot", function(name, value) {
   core(self)$set_slot(name, value)
 })
@@ -19,11 +19,11 @@ object_scope <- function(res, self) {
 
 
 # Basic bootstrapping accessor - can do better once object has more methods
-"$.io" <- function(x, i, ...) {
+"$.mutatr" <- function(x, i, ...) {
   res <- core(x)$get_local_slot(i)
   object_scope(res, x)
 }
-"$<-.io" <- function(x, i, value) {
+"$<-.mutatr" <- function(x, i, value) {
   x$set_slot(i, value)
   x
 }
@@ -102,9 +102,9 @@ Object$do({
 })
 
 
-format.io <- function(x, ...) {
+format.mutatr <- function(x, ...) {
   x$as_string(...)
 }
-print.io <- function(x, ...) {
+print.mutatr <- function(x, ...) {
   cat(format(x), "\n", sep = "")
 }

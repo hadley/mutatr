@@ -4,7 +4,7 @@ Object$do({
   # ' Add prototype to end of inheritance chain
   # ' @returns self
   self$append_proto <- function(proto) {
-    stopifnot(is.io(proto))
+    stopifnot(is.mutatr(proto))
     self$protos <- c(self$protos, list(proto))
     self
   }
@@ -12,13 +12,13 @@ Object$do({
   #' Add prototype to start of inheritance chain
   #' @returns self
   self$prepend_proto <- function(proto) {
-    stopifnot(is.io(proto))
+    stopifnot(is.mutatr(proto))
     self$protos <- c(list(proto), self$protos)
     self
   }
   
   self$remove_proto <- function(proto) {
-    stopifnot(is.io(proto))
+    stopifnot(is.mutatr(proto))
     pos <- unlist(lapply(self$protos, identical, proto))
     self$protos <- self$protos[!pos]
     self
@@ -84,7 +84,7 @@ Object$do({
   self$clone <- function(...) {
     aclone <- list(core(self)$clone()) 
     core(aclone)$set_slot("protos", list(self))
-    aclone <- structure(aclone, class = "io")
+    aclone <- structure(aclone, class = "mutatr")
     
     aclone$init(...) # initialise cloned object
     aclone
@@ -122,7 +122,7 @@ Object$do({
 
 })
 
-"$.io" <- function(x, i, ...) {
+"$.mutatr" <- function(x, i, ...) {
   get_slot(x, i)
 }
 
