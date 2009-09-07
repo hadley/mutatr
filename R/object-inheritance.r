@@ -79,7 +79,15 @@ Object$do({
     aclone$init(...) # initialise cloned object
     aclone
   }
-  self$init <- function(...) {}
+
+  # Default initialisation behaviour is to use set_slot to create all
+  # passed in attributes
+  self$init <- function(...) {
+    attributes <- list(...)
+    for(attr in names(attributes)) {
+      self$set_slot(attr, attributes[[attr]])
+    } 
+  }
 
   self$has_slot <- function(name) {
     iter <- self$i_ancestors()
