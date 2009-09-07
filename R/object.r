@@ -31,7 +31,7 @@ object_scope <- function(res, self) {
 # Next we create a do function that lets us define multiple functions
 # simultaneously.
 Object$do <- function(expr) {
-  env <- new.env(parent = globalenv())
+  env <- new.env(parent = parent.frame())
   env$self <- self
   eval(substitute(expr), env)
   self
@@ -41,7 +41,7 @@ Object$do({
   self$.name <- "Object"
   
   self$do_string <- function(text) {
-    env <- new.env(parent = globalenv())
+    env <- new.env(parent = parent.frame())
     env$self <- self
     eval(parse(text = text), env)
     self
