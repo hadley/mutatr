@@ -48,26 +48,16 @@ Object$do({
       parent_obj$protos <- parents
     }
     parent_obj$.is_parent <- TRUE    
-    parent_obj$.context <- get_context(self)
     
     # Over-ride set slot so that all setting happens in the corrent context:
     # the original object
+    parent_obj$.context <- get_context(self)
     parent_obj$set_slot <- function(name, value) {
       parent_obj$.context$set_slot(name, value)
     }
     
     parent_obj
   }
-
-  self$get_context <- function() {
-    get_context(self)
-  }
-
-  # self$set_context <- function(value) {
-  #   message("Setting context")
-  #   self$set_slot(".context", value)
-  # }
-  # 
 
   self$has_ancestor <- function(proto) {
     i <- self$i_ancestors()

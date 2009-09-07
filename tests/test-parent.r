@@ -46,10 +46,10 @@ test_that("assignment should happen in original object", {
   b <- a$clone()
 
   # Check contexts
-  expect_that(a$context, equals(a))
-  expect_that(a$parent()$context, equals(a))
-  expect_that(b$context, equals(b))
-  expect_that(b$parent()$context, equals(b))
+  expect_that(get_context(a), equals(a))
+  expect_that(get_context(a$parent()), equals(a))
+  expect_that(get_context(b), equals(b))
+  expect_that(get_context(b$parent()), equals(b))
 
   a$a <- 10
   b$a <- 15
