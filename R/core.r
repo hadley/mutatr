@@ -34,21 +34,31 @@ Core <- local({
   # Cloning a bootstrap object just produces an environment with usual
   # R environment inheritance and syntax
   clone <- function() {
-    aclone <- new.env(FALSE, self)
+    aclone <- new.env(FALSE, self[[1]])
     aclone$core <- new.env(TRUE, emptyenv())
-    structure(aclone, class = "core")
+    structure(list(aclone), class = "core")
   }
   
-  self <- structure(environment(), class = "core")
+  # Can not reliably assign attributes to an environment, so need to 
+  # store it within a list, and assign based on that.
+  self <- structure(list(environment()), class = "core")
 })
-parent.env(Core) <- baseenv()
+parent.env(Core[[1]]) <- baseenv()
 
 # This slightly complicated code ensures that there is just one copy of the
 # accessor functions stored in the bottom environment.
 "$.core" <- function(x, i) {
-  res <- get(i, x)
+  res <- get(i, x[[1]])
   if (is.function(res)) {
-    environment(res) <- x
+    environment(res) <- x[[1]]
   }
   res
+}
+
+format.core <- function(x, ...) {
+  paste("Core <", envname(x[[1]]), ">", sep = "")
+}
+
+print.core <- function(x, ...) {
+  cat(format(x), "\n")
 }

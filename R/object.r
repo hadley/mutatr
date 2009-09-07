@@ -28,9 +28,8 @@ object_scope <- function(res, self) {
   x
 }
 
-# Next we create a do function that lets us define
-# multiple functions simultaneously.  Basic strategy is to evaluate in
-# temporary environment and then copy everything across with set_slot. 
+# Next we create a do function that lets us define multiple functions
+# simultaneously.
 Object$do <- function(expr) {
   env <- new.env(parent = globalenv())
   env$self <- self
@@ -94,7 +93,7 @@ Object$do({
   }
 
   self$as_string <- function(...) {
-    paste(self$.name, " <", envname(core(self)), ">", sep = "")
+    paste(self$.name, " <", envname(core(self)[[1]]), ">", sep = "")
   }
   
   self$format <- function(...) {
