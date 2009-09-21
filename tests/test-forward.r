@@ -1,4 +1,4 @@
-context("Test method forwarding")
+context("Method forwarding")
 
 test_that("accessing an undefined property returns an error", {
   a <- Object$clone()

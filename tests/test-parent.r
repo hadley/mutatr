@@ -1,4 +1,4 @@
-context("Test parent function")
+context("Parent function")
 
 test_that("object doesn't have a parent", {
   expect_that(Object$parent(), throws_error("no parent"))
