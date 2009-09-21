@@ -138,21 +138,20 @@ get_slot <- function(obj, name, scope = obj) {
   while(iter$has_next()) {
     ancestor <- iter$get_next()
     
-    # Check if a gettor function exists
+    # Look for that slot 
+    if (core(ancestor)$has_local_slot(name)) {
+      res <- core(ancestor)$get_local_slot(name)
+      res <- object_scope(res, scope)
+      return(res)
+    }    
+    
+    # Otherwise if a gettor function exists
     gettor <- paste("get", name, sep = "_")
     if (core(ancestor)$has_local_slot(gettor)) {
       res <- core(ancestor)$get_local_slot(gettor)
       res <- object_scope(res, scope)
       return(res())
     }
-    
-    # Otherwise just look for that slot 
-    if (core(ancestor)$has_local_slot(name)) {
-      res <- core(ancestor)$get_local_slot(name)
-      res <- object_scope(res, scope)
-      return(res)
-    }
-    
   }
   
   # If slot not found anywhere, try looking for a forward method
