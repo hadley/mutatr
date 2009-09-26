@@ -21,11 +21,11 @@ e <- d$clone()
 # Currently slow even for top level.  Considerable ecrease in 
 # speed as hierarchy deepens, but not a huge difference
 times <- c( 
- a = time_n(a$a, 100), # 3500 / s
- b = time_n(b$a, 100),
- c = time_n(c$a, 100), # 1900 / s
- d = time_n(d$a, 100),
- e = time_n(e$a, 100)  # 800 / s
+ a = 1 / time_n(a$a, 100), # 3500 / s
+ b = 1 / time_n(b$a, 100),
+ c = 1 / time_n(c$a, 100), # 1900 / s
+ d = 1 / time_n(d$a, 100),
+ e = 1 / time_n(e$a, 100)  # 800 / s
 )
 
 1 / time_n(a$a, 100)
