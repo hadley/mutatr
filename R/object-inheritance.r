@@ -133,6 +133,15 @@ get_context <- function(obj) {
 }
 
 get_slot <- function(obj, name, scope = obj) {
+  # TODO: look locally and then in cache
+  # Cache should store object with correct scope 
+  # Cache should be invalidated if value changes - i.e. set in parent
+  # should invalidate all children caches - difficult! (but could be
+  # accomplished with listeners on set_slot)  Abandoning dynamic
+  # scoping would make this easier (but would then need to explicitly clone
+  # when necessary to avoid mix of dynamic and static).  Another option would
+  # be to only cache frozen objects.  
+  
   iter <- ancestor_iterator(obj)
   
   while(iter$has_next()) {
