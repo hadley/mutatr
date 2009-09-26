@@ -132,6 +132,18 @@ get_context <- function(obj) {
   }
 }
 
+#' Get slot
+#' 
+#' Function that powers inheritance.  Given an object and a slot name
+#' iterators through ancestors looking for slots that match that name.
+#'
+#' If the slot is a function, it adjusts the function scope (with 
+#' \code{object_scope}) so that the self context is set correctly.
+#'
+#' @param obj object in which to look for slot
+#' @param name name of slot to look for
+#' @param scope self object to use for object context
+#' @keywords internal
 get_slot <- function(obj, name, scope = obj) {
   # TODO: look locally and then in cache
   # Cache should store object with correct scope 

@@ -1,13 +1,18 @@
-# Boostrapping core - mostly implements usual R access, but uses object
-# scoping.  Functions CAN NOT call other object functions because scope will
-# be incorrect (functions not explicitly accessed via $.core will still have
-# lexical scope)
-# 
-# Should implement:
-#   * protos, append_proto, set_proto, get_proto
-#   * has_slot, get_slot, set_slot, slot_names
-#   * clone
-#   * do
+#' Create the core object.
+#'
+#' Boostrapping core - mostly implements usual R access, but uses object
+#' scoping.  Functions CAN NOT call other object functions because scope will
+#' be incorrect (functions not explicitly accessed via $.core will still have
+#' lexical scope).
+#' 
+#' Should implement:
+#'   * protos, append_proto, set_proto, get_proto
+#'   * has_slot, get_slot, set_slot, slot_names
+#'   * clone
+#'   * do
+#' @keywords internal
+#' @aliases Core $.core print.core format.core
+#' @name core-bootstrap
 Core <- local({
   core <- new.env(TRUE, emptyenv())
   

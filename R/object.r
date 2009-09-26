@@ -1,11 +1,21 @@
+#' Extra core from object
+#' @keywords internal
 core <- function(x) x[[1]]
 
-# Set up minimal object - just need to be add new slots
+#' Core mutatr object
+#' 
+#' @aliases Object $.mutatr $<-.mutatr format.mutatr print.mutatr
+#' @keywords programming
 Object <- structure(list(Core$clone()), class = "mutatr")
 core(Object)$set_slot("set_slot", function(name, value) {
   core(self)$set_slot(name, value)
 })
 
+#' Add object scope to a function
+#' 
+#' @param res object to add object scope to (does nothing if not a function)
+#' @param self self object
+#' @keywords internal
 object_scope <- function(res, self) {
   # Add environment to top of stack that contains the self object
   if (is.function(res)) {

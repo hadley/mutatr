@@ -9,5 +9,5 @@ URL: http://had.co.nz/
 Depends: digest
 License: GPL
 LazyData: true
-Collate: 'utils.r' 'core.r' 'ancestors.r' 'object.r' 'object-inheritance.r'
-
+Collate: 'ancestors.r' 'core.r' 'object-inheritance.r' 'object.r'
+    'utils.r'
