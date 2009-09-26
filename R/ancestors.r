@@ -1,3 +1,14 @@
+#' Ancestor iterator.
+#' This iterator has two methods \code{has_next} and \code{get_next} and
+#' iterates deep-first through the ancestry graph of a mutatr object.
+#' 
+#' @param proto the object with the ancestors
+#' @examples
+#' A <- Object$clone()
+#' B <- A$clone()
+#' C <- B$clone()
+#' ai <- ancestor_iterator(C)
+#' while(ai$has_next()) print(ai$get_next())
 ancestor_iterator <- function(proto) {
   todo <- list(proto)
   done <- list()
