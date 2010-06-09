@@ -2,6 +2,8 @@
 #' @include utils.r
 NULL
 
+core <- function(x) x[[1]]
+
 #' Core mutatr object
 #' 
 #' @aliases Object $.mutatr $<-.mutatr format.mutatr print.mutatr
