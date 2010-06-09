@@ -1,0 +1,3 @@
+mutratr 0.1.1 (2010-06-06)
+
+* Add namespace and only export Object and its methods

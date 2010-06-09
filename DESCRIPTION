@@ -1,7 +1,7 @@
 Package: mutatr
 Type: Package
 Title: Mutable objects for R.
-Version: 0.1
+Version: 0.1.1
 Author: Hadley Wickham <h.wickham@gmail.com>
 Maintainer: Hadley Wickham <h.wickham@gmail.com>
 Description: Mutable prototype based objects with multiple inheritance.
