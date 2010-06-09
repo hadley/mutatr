@@ -1,11 +1,16 @@
-#' Extra core from object
-#' @keywords internal
-core <- function(x) x[[1]]
+#' @include core.r
+#' @include utils.r
+NULL
 
 #' Core mutatr object
 #' 
 #' @aliases Object $.mutatr $<-.mutatr format.mutatr print.mutatr
+#' @S3method format mutatr
+#' @S3method print mutatr
+#' @S3method "$" mutatr
+#' @S3method "$<-" mutatr
 #' @keywords programming
+#' @export
 Object <- structure(list(Core$clone()), class = "mutatr")
 core(Object)$set_slot("set_slot", function(name, value) {
   core(self)$set_slot(name, value)

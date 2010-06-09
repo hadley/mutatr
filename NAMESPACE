@@ -1,0 +1,5 @@
+S3method(format, mutatr)
+S3method(print, mutatr)
+S3method("$", mutatr)
+S3method("$<-", mutatr)
+export(Object)

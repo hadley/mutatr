@@ -1,3 +1,6 @@
+#' @include object.r
+NULL
+
 Object$do({
   self$protos <- list()
   
@@ -124,6 +127,11 @@ Object$do({
   get_slot(x, i)
 }
 
+#' Get context.
+#' Get object context for parent calls.
+#'
+#' @param obj object
+#' @keywords internal
 get_context <- function(obj) {
   if (core(obj)$has_local_slot(".context")) {
     core(obj)$get_local_slot(".context")

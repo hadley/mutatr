@@ -7,7 +7,7 @@
 #' A <- Object$clone()
 #' B <- A$clone()
 #' C <- B$clone()
-#' ai <- ancestor_iterator(C)
+#' ai <- mutatr:::ancestor_iterator(C)
 #' while(ai$has_next()) print(ai$get_next())
 ancestor_iterator <- function(proto) {
   todo <- list(proto)

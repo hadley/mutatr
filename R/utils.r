@@ -11,3 +11,5 @@ envname <- function(env) {
 #'
 #' @param x object to test
 is.mutatr <- function(x) inherits(x, "mutatr")
+
+core <- function(x) x[[1]]
