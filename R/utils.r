@@ -10,4 +10,5 @@ envname <- function(env) {
 #' Is this a mutatr object?
 #'
 #' @param x object to test
+#' @export
 is.mutatr <- function(x) inherits(x, "mutatr")
