@@ -43,8 +43,14 @@ Core <- local({
     aclone$core <- new.env(TRUE, emptyenv())
     structure(list(aclone), class = "core")
   }
-  
-  # Can not reliably assign attributes to an environment, so need to 
+
+  copy <- function() {
+    aclone <- new.env(FALSE, self[[1]])
+    aclone$core <- list2env(as.list(core), parent = emptyenv(), hash = TRUE)
+    structure(list(aclone), class = "core")
+  }
+
+  # Can not reliably assign attributes to an environment, so need to
   # store it within a list, and assign based on that.
   self <- structure(list(environment()), class = "core")
 })
