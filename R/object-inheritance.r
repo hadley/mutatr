@@ -121,7 +121,52 @@ Object$do({
       call. = FALSE)     
   }
 
+  #' @param do_not_copy list of objects which must not be copying
+  self$deep_copy <- function(do_not_copy = list()) {
+    # Add `Object' to do-not-copy list
+    do_not_copy <- c(do_not_copy, list(Object))
+    do_not_copy_names <- sapply(do_not_copy, function(obj) envname(core(obj)[[1]]))
+
+    # Make copy and disengage it
+    disengage_copy(make_copy(self), do_not_copy_names = do_not_copy_names)
+  }
 })
+
+make_copy <- function(x) {
+   aclone <- list(core(x)$copy())
+   aclone <- structure(aclone, class = "mutatr")
+}
+
+disengage_copy <- function(x, env = new.env(hash = TRUE, parent = emptyenv()), do_not_copy_names) {
+
+  # Save old protos (must be low-lewel)
+  old.protos <- core(x)$get_local_slot("protos")
+
+  # Clear protos list, low-level (to avoid endless recursion)
+  core(x)$set_slot("protos", list())
+
+  new.protos <- lapply(old.protos, function(proto) {
+    name <- envname(core(proto)[[1]]);
+
+    # Check necessity of cloning
+    if (name %in% do_not_copy_names)
+      return (proto)
+
+    if (!exists(name, envir = env)) {
+      # At once copy object
+      env[[name]] <- make_copy(proto)
+      # Then disangage it
+      disengage_copy(env[[name]], env = env, do_not_copy_names = do_not_copy_names)
+    }
+
+    env[[name]]
+  })
+
+  # Low-level set new proto
+  core(x)$set_slot("protos", new.protos)
+
+  x
+}
 
 "$.mutatr" <- function(x, i, ...) {
   get_slot(x, i)
